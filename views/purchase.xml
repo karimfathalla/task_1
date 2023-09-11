@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_request_form" model="ir.ui.view">
+        <field name="name">purchase.request.form</field>
+        <field name="model">purchase.request</field>
+        <field name="arch" type="xml">
+
+            <form>
+                <header>
+                    <button name="to_approve_purchase" string="Submit For Approval" class="oe_highlight" states="draft"
+                            type="object"/>
+
+                    <!-- in submit for approval -->
+                    <button name="approve" type="object" string="Approve" class="oe_highlight"
+                            states="to_be_approved"/>
+                    <button name="%(task_1.cancel_wizard_)d" type="action" string="Reject" class="oe_highlight"
+                            states="to_be_approved"/>
+                    <!--                    -->
+                    <button name="to_cancel" string="Cancel" class="oe_highlight" states="draft" type="object"
+                    />
+
+                    <button name="reset_to_draft" string="Reset To Draft" class="oe_highlight" states="cancel"
+                            type="object"/>
+
+                    <field name="state" widget="statusbar" Clickable='False'
+                           statusbar_colors="{'KEY_IS_STATE':'VALUE_IS_COLOR'}"
+                           statusbar_visible="draft,approve,reject,cancel,to_be_approve"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'readonly':[('state', 'in',['approve', 'reject', 'cancel'])]}"/>
+                            <field name="start_date" attrs="{'readonly':[('state', 'in',['approve', 'reject', 'cancel'])]}"/>
+                            <field name="end_date" attrs="{'readonly':[('state', 'in',['approve', 'reject', 'cancel'])]}"/>
+                            <field name="order_lines_ids" type="one2many" attrs="{'readonly':[('state', 'in',['approve', 'reject', 'cancel'])]}">
+                                <tree>
+                                    <field name="purchase_requests_id" />
+                                    <field name="description"/>
+                                    <field name="cost_price"/>
+                                    <field name="sub_total"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="requested_by_id" attrs="{'readonly':[('state', 'in',['approve', 'reject', 'cancel'])]}"/>
+                            <field name="rejection_reason" attrs="{'readonly':[('state', 'in',['approve', 'reject', 'cancel'])]}"/>
+                        </group>
+                    </group>
+                    <!--                    <notebook>-->
+                    <!--                        <page String="Order Lines" name="order_lines">-->
+
+                    <!--                        </page>-->
+                    <!--                    </notebook>-->
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_purchase_request_tree" model="ir.ui.view">
+        <field name="name">purchase.request.tree</field>
+        <field name="model">purchase.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="purchase_order_test" model="ir.actions.act_window">
+        <field name="name">Purchase Request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_purchase_request_root"
+              name="Purchase Request"
+              parent="purchase.menu_procurement_management"
+              sequence="20"
+              action="purchase_order_test"/>
+</odoo>

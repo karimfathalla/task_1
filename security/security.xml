@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_purchase_request" model="res.groups">
+        <field name="name">Purchase Group</field>
+
+    </record>
+</odoo>
